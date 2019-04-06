@@ -17,7 +17,8 @@ We can create accounts with following currencies only:
 
 In case, one tries to create account with currency other than above ones, will get an BAD REQUEST status in response.
 
-*Note, all POST API expects Content-Type, Accept headers with value "application/json"
+*Note, all POST API expects Content-Type, Accept headers with value "application/json".
+
 Create Account API:
 ```
 POST, {server}:9090/revolut/account/create/{currency}
@@ -69,6 +70,7 @@ Body:
 }
 ```
 *NOTE, Fx rate are hard-coded for money transfer between accounts having different currencies.
+
 For eg, user want to transfer $100 to account that deals in EUR currency. 
 So here Fx rate conversion will take place internally.
 
