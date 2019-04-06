@@ -3,8 +3,10 @@ Revolut hiring exercise of a RESTful API (including data model and the backing i
 for money transfers between accounts.
 
 Post clone, build the project and run via embedded Tomcat pluggin
+```
 mvn clean install
 mvn tomcat7:run
+```
 Currently, the api will on port 9090
 
 For testing money transfer, we'll first we need to create atleast 2 account.
