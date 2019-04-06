@@ -18,7 +18,12 @@ public class AccountInfoDataService {
     private AccountInfoDataService() {
     }
 
-    public void createAccount(BankAccountInfo accountInfo) { accounts.add(accountInfo); }
+    public void addAccount(BankAccountInfo accountInfo) {
+        if (this.getAccountInfo(accountInfo.getAccountNumber()) != null) {
+            throw new UnsupportedOperationException("Account already exist #"+accountInfo.getAccountNumber());
+        }
+        accounts.add(accountInfo);
+    }
 
     public void deleteAccount(long id) {
         final Optional<BankAccountInfo> accnt = accounts.stream().filter(a -> id == a.getAccountNumber()).findAny();

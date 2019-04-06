@@ -24,7 +24,7 @@ public class BankAccountService {
 
         BankAccountInfo newAccount = new BankAccountInfo.Builder().setActive(true).setBalance(0).setCreationDate(new Date())
                                         .setAccountNumber(accountNumCounter.incrementAndGet()).setCurrency(cur).build();
-        accountInfoDataService.createAccount(newAccount);
+        accountInfoDataService.addAccount(newAccount);
         logger.info("Created account {} with currency {}", newAccount.getAccountNumber(), currency);
         return newAccount;
     }

@@ -77,7 +77,7 @@ public class AccountTransactionsInfoService {
     private List<BankAccountTransactionInfo> getTxnDetails(long accountId, Date fromDate, Date endDate) {
         final BankAccountInfo accountInfo = accountService.getAccountInfo(accountId);
         if (accountInfo != null) {
-            return txnDataService.getAllTransactions(fromDate, endDate);
+            return txnDataService.getAllTransactions(accountInfo.getAccountNumber(), fromDate, endDate);
         }
         return Collections.emptyList();
     }
@@ -93,7 +93,7 @@ public class AccountTransactionsInfoService {
     private List<BankAccountTransactionInfo> getTxnDetails(long accountId, Date fromDate) {
         final BankAccountInfo accountInfo = accountService.getAccountInfo(accountId);
         if (accountInfo != null) {
-            return txnDataService.getAllTransactions(fromDate);
+            return txnDataService.getAllTransactions(accountInfo.getAccountNumber(), fromDate);
         }
         return Collections.emptyList();
     }

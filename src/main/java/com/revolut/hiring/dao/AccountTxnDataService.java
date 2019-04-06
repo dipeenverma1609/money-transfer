@@ -28,14 +28,17 @@ public class AccountTxnDataService {
         return txn.isPresent() ? txn.get() : null;
     }
 
-    public List<BankAccountTransactionInfo> getAllTransactions(final Date fromDate) {
-        return transactions.stream().filter(t -> t.getTxnDate().after(fromDate) || t.getTxnDate().equals(fromDate))
+    public List<BankAccountTransactionInfo> getAllTransactions(long accountId, final Date fromDate) {
+        return transactions.stream()
+                .filter(t -> accountId == t.getAccountId())
+                .filter(t -> t.getTxnDate().after(fromDate) || t.getTxnDate().equals(fromDate))
                 .sorted(Comparator.comparing(BankAccountTransactionInfo::getTxnDate))
                 .collect(Collectors.toList());
     }
 
-    public List<BankAccountTransactionInfo> getAllTransactions(final Date fromDate, final Date endDate) {
+    public List<BankAccountTransactionInfo> getAllTransactions(long accountId, final Date fromDate, final Date endDate) {
         return transactions.stream()
+                .filter(t -> accountId == t.getAccountId())
                 .filter(t -> (t.getTxnDate().after(fromDate) || t.getTxnDate().equals(fromDate)) &&
                              (t.getTxnDate().before(endDate) || t.getTxnDate().equals(endDate)))
                 .sorted(Comparator.comparing(BankAccountTransactionInfo::getTxnDate))
