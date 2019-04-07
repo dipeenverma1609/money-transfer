@@ -17,7 +17,7 @@ public class BankAccountServiceTest {
     public void testAccountServices() {
 
         List<BankAccountInfo> accounts = testClass.getAccountsInfo();
-        assertEquals(0 , accounts.size());
+        int accountsCount = accounts.size();
 
         try {
             testClass.createAccount("GBP");
@@ -25,12 +25,12 @@ public class BankAccountServiceTest {
         } catch (UnsupportedOperationException e) {}
 
         final BankAccountInfo usdAccount = testClass.createAccount("USD");
-        assertEquals(1 , testClass.getAccountsInfo().size());
+        assertEquals(accountsCount+1 , testClass.getAccountsInfo().size());
         assertEquals(usdAccount , testClass.getAccountInfo(usdAccount.getAccountNumber()));
         assertNull(testClass.getAccountInfo(32432));
 
         testClass.deleteAccount(usdAccount.getAccountNumber());
-        assertEquals(0 , testClass.getAccountsInfo().size());
+        assertEquals(accountsCount , testClass.getAccountsInfo().size());
         assertNull(testClass.getAccountInfo(usdAccount.getAccountNumber()));
     }
 }

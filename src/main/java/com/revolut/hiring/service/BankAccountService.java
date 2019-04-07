@@ -22,9 +22,19 @@ public class BankAccountService {
         final Currency cur = Currency.valueByName(currency);
         if (cur == null) throw new UnsupportedOperationException(currency + " accounts not supported");
 
-        BankAccountInfo newAccount = new BankAccountInfo.Builder().setActive(true).setBalance(0).setCreationDate(new Date())
-                                        .setAccountNumber(accountNumCounter.incrementAndGet()).setCurrency(cur).build();
-        accountInfoDataService.addAccount(newAccount);
+        final BankAccountInfo.Builder newAccountBuilder = new BankAccountInfo.Builder().setActive(true).setBalance(0).setCreationDate(new Date())
+                                        .setAccountNumber(accountNumCounter.incrementAndGet()).setCurrency(cur);
+        boolean isAccountCreated = false;
+        BankAccountInfo newAccount = newAccountBuilder.build();
+        do {
+            try {
+                accountInfoDataService.addAccount(newAccount);
+                isAccountCreated = true;
+            } catch (UnsupportedOperationException e) {
+                newAccount = newAccountBuilder.setAccountNumber(accountNumCounter.incrementAndGet()).build();
+            }
+        } while(!isAccountCreated);
+
         logger.info("Created account {} with currency {}", newAccount.getAccountNumber(), currency);
         return newAccount;
     }

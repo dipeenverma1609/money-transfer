@@ -3,6 +3,8 @@ package com.revolut.hiring.jaxrs;
 import com.revolut.hiring.exceptions.InsufficientFundsException;
 import com.revolut.hiring.jaxrs.bean.*;
 import com.revolut.hiring.service.AccountTransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -10,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -21,6 +24,7 @@ import static com.revolut.hiring.util.DateUtil.getDateString;
 @Path("account/money")
 public class MoneyTransferService {
 
+    private static final Logger logger = LoggerFactory.getLogger(MoneyTransferService.class);
     private final AccountTransactionService txnService = new AccountTransactionService();
 
     @POST
@@ -46,6 +50,7 @@ public class MoneyTransferService {
             return Response.status(BAD_REQUEST).entity(entity).build();
 
         } catch (Throwable cause) {
+            logger.error("Error in credit", cause);
             entity.setStatus("Failed :: " + cause.getMessage());
             return Response.serverError().entity(entity).build();
         }
@@ -79,6 +84,7 @@ public class MoneyTransferService {
             return Response.status(BAD_REQUEST).entity(entity).build();
 
         } catch (Throwable cause) {
+            logger.error("Error in debit", cause);
             entity.setStatus("Failed :: " + cause.getMessage());
             return Response.serverError().entity(entity).build();
         }
@@ -118,6 +124,7 @@ public class MoneyTransferService {
             return Response.status(BAD_REQUEST).entity(entity).build();
 
         } catch (Throwable cause) {
+            logger.error("Error in money transfer", cause);
             entity.setStatus("Failed :: " + cause.getMessage());
             return Response.serverError().entity(entity).build();
         }
@@ -129,6 +136,13 @@ public class MoneyTransferService {
         boolean isValid = true;
 
         if (amount == null || amount.isNaN()) isValid &= false;
+
+        if (isValid) {
+            double d2 = amount % 1;
+            final DecimalFormat df = new DecimalFormat("#.00");
+            int decimalLength = (df.format(d2).length() - 1);
+            if (decimalLength != 2) isValid &= false;
+        }
 
         return isValid;
     }
