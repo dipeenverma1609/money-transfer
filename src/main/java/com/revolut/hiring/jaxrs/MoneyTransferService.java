@@ -75,6 +75,7 @@ public class MoneyTransferService {
         try {
             long txnId = txnService.debit(request.getAccount(), request.getAmount());
             entity.setTxnId(txnId);
+            entity.setStatus("Success");
         } catch (InsufficientFundsException cause) {
             entity.setStatus(cause.getMessage());
             return Response.status(FORBIDDEN).entity(entity).build();
